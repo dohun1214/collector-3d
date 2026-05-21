@@ -1,0 +1,36 @@
+# Claude Code
+.claude/
+
+# 환경 설정 (민감 정보)
+backend/src/main/resources/application.properties
+ai-server/.env
+
+# 업로드 파일 (대용량)
+backend/uploads/
+ai-server/uploads/
+
+# Python
+ai-server/__pycache__/
+ai-server/**/__pycache__/
+ai-server/*.pyc
+ai-server/.venv*/
+ai-server/venv*/
+
+# Spring Boot 빌드
+backend/build/
+backend/.gradle/
+backend/out/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
