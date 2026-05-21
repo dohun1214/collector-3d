@@ -1,7 +1,7 @@
 import api from './axios';
 import type { ItemDetail, ItemSummary, JobStatus, PageResponse } from '../types';
 
-export const getItems = (params?: { keyword?: string; categoryId?: number; page?: number; size?: number }) =>
+export const getItems = (params?: { keyword?: string; categoryId?: number; page?: number; size?: number; sort?: string }) =>
   api.get<PageResponse<ItemSummary>>('/api/items', { params });
 
 export const getItem = (id: number) =>

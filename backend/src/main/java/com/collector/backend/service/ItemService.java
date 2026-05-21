@@ -3,6 +3,7 @@ package com.collector.backend.service;
 import com.collector.backend.domain.category.Category;
 import com.collector.backend.domain.category.CategoryRepository;
 import com.collector.backend.domain.item.*;
+import com.collector.backend.domain.social.CommentRepository;
 import com.collector.backend.domain.user.User;
 import com.collector.backend.domain.user.UserRepository;
 import com.collector.backend.dto.*;
@@ -21,6 +22,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,15 +38,25 @@ public class ItemService {
     private final JobRepository jobRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final ItemLikeRepository itemLikeRepository;
+    private final ItemSaveRepository itemSaveRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
-    public Page<ItemSummary> getPublicItems(String keyword, Long categoryId, Pageable pageable) {
+    public Page<ItemSummary> getPublicItems(String keyword, Long categoryId, String sortBy, int page, int size) {
         String kw = (keyword != null && keyword.isBlank()) ? null : keyword;
-        return itemRepository.findPublicItems(kw, categoryId, pageable)
-                .map(ItemSummary::from);
+        if ("trending".equals(sortBy)) {
+            Pageable pageable = PageRequest.of(page, size);
+            return itemRepository.findPublicItemsOrderByLikes(kw, categoryId, pageable).map(ItemSummary::from);
+        }
+        Sort sort = "views".equals(sortBy)
+                ? Sort.by("viewCount").descending()
+                : Sort.by("createdAt").descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return itemRepository.findPublicItems(kw, categoryId, pageable).map(ItemSummary::from);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ItemResponse getItem(Long id, String requesterEmail) {
         Item item = findItemById(id);
         if (!item.getIsPublic()) {
@@ -50,7 +64,15 @@ public class ItemService {
                 throw new AccessDeniedException("비공개 아이템입니다.");
             }
         }
-        return ItemResponse.from(item);
+        item.incrementViewCount();
+
+        long likeCount = itemLikeRepository.countByItem_Id(id);
+        long commentCount = commentRepository.countByItem_Id(id);
+        long saveCount = itemSaveRepository.countByItem_Id(id);
+        boolean isLiked = requesterEmail != null && itemLikeRepository.existsByUser_EmailAndItem_Id(requesterEmail, id);
+        boolean isSaved = requesterEmail != null && itemSaveRepository.existsByUser_EmailAndItem_Id(requesterEmail, id);
+
+        return ItemResponse.fromWithSocial(item, likeCount, commentCount, saveCount, isLiked, isSaved);
     }
 
     @Transactional

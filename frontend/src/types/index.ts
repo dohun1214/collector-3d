@@ -24,6 +24,9 @@ export interface ItemSummary {
   authorId: number;
   authorNickname: string;
   createdAt: string;
+  viewCount: number;
+  likeCount: number;
+  commentCount: number;
 }
 
 export interface ItemDetail {
@@ -39,6 +42,12 @@ export interface ItemDetail {
   authorNickname: string;
   createdAt: string;
   updatedAt: string;
+  viewCount: number;
+  likeCount: number;
+  commentCount: number;
+  saveCount: number;
+  isLiked: boolean;
+  isSaved: boolean;
 }
 
 export interface PageResponse<T> {
@@ -59,4 +68,32 @@ export interface JobStatus {
   startedAt: string | null;
   finishedAt: string | null;
   progress: number;
+}
+
+export interface CommentResponse {
+  id: number;
+  itemId: number;
+  authorId: number;
+  authorNickname: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface UserProfile {
+  id: number;
+  nickname: string;
+  joinedAt: string;
+  itemCount: number;
+  totalLikes: number;
+  totalViews: number;
+}
+
+export interface LikeResponse {
+  liked: boolean;
+  likeCount: number;
+}
+
+export interface SaveResponse {
+  saved: boolean;
+  saveCount: number;
 }

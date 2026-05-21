@@ -40,7 +40,7 @@ export default function GaussianViewer({ plyUrl }: Props) {
   return (
     <div
       ref={containerRef}
-      style={{ width: '100%', aspectRatio: '1', borderRadius: '16px', overflow: 'hidden', background: '#1f2937' }}
+      style={{ position: 'relative', width: '100%', aspectRatio: '1', borderRadius: '16px', overflow: 'hidden', background: '#1f2937' }}
     />
   );
 }

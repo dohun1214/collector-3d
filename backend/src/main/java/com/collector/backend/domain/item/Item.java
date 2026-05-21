@@ -42,6 +42,9 @@ public class Item {
     @Column(name = "thumbnail_path", length = 500)
     private String thumbnailPath;
 
+    @Column(name = "view_count", nullable = false)
+    private int viewCount = 0;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -72,5 +75,9 @@ public class Item {
 
     public void setThumbnailPath(String thumbnailPath) {
         this.thumbnailPath = thumbnailPath;
+    }
+
+    public void incrementViewCount() {
+        this.viewCount++;
     }
 }
