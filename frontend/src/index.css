@@ -140,6 +140,7 @@ a { text-decoration: none; color: inherit; }
 .author-handle { font-size: 12px; color: var(--text-3); font-family: var(--font-mono); }
 
 .upload-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 36px; align-items: start; }
+.upload-grid > * { min-width: 0; }
 .dropzone { border: 1.5px dashed var(--border-strong); border-radius: var(--radius-lg); background: radial-gradient(circle at 50% 30%, rgba(255,200,120,0.04), transparent 60%), var(--surface); padding: 48px 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 320px; transition: border-color .2s, background .2s; }
 .dropzone:hover, .dropzone.drag-over { border-color: var(--accent-border); background: var(--accent-soft); }
 .dropzone-icon { width: 56px; height: 56px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--border); display: grid; place-items: center; margin-bottom: 18px; color: var(--accent); }
